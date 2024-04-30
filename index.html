@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Popout Player</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container col-xxl-8 px-4 py-5">
+        <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+          <div class="col-10 col-sm-8 col-lg-6">
+            <img src="display.png" class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+          </div>
+          <div class="col-lg-6">
+            <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Minimalist Youtube Popout Player</h1>
+            <p class="lead">Minimalist YouTube video pop-out tool for distraction-free viewing experience. This lightweight script removes gradients, unnecessary control buttons, and relocates the progress bar for an unobstructed viewing experience.<br> <br> Drag this button to your browser's bookmark toolbar. Click it while watching a YouTube video to activate its function. Enjoy!</p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+              <a draggable="true" type="button" class="btn btn-danger btn-lg px-4 me-md-2" id="dragButton">DRAG ME</a>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+        var encodedString = `javascript: (function () {
+    function openPopup(websiteUrl) {
+        var width = 800;
+        var height = 450;
+        var left = (window.innerWidth - width) / 2;
+        var top = (window.innerHeight - height) / 2;
+        var popup = window.open(websiteUrl, "_blank", "width=" + width + ", height=" + height + ", top=" + top + ", left=" + left);
+        if (!popup || popup.closed || typeof popup.closed == 'undefined') {
+            alert("Popup window was blocked by the browser. Please allow popups for this site.");
+        }
+        return popup;
+    }
+    if(document.querySelector("#page-manager > ytd-watch-flexy")){
+        var videoId = document.querySelector("#page-manager > ytd-watch-flexy").getAttribute("video-id");
+        var websiteUrl = "https://www.youtube.com/embed/" + videoId;
+    }else if (document.querySelector("#utubeframe")) {
+        var websiteUrl = document.querySelector("#utubeframe").src;
+        var regex = /(?:embed\\/|v=|vi?=|\\/v\\/|youtu\\.be\\/|\\/embed\\/|\\/1\\/)([^#\\&\\?]*).*/;
+        var match = websiteUrl.match(regex);
+        if (match && match[1]) {
+            var videoId = match[1];
+        } else {
+            return;
+        }
+        window.open("https://www.youtube.com/watch?v="+videoId, "_blank");
+        return;
+    }
+    document.querySelector("#movie_player > div.html5-video-container > video").pause();
+    var popup = openPopup(websiteUrl);
+    popup.addEventListener("load", function () {
+        console.log("popup loaded successfully");
+        popup.document.querySelector("#movie_player > div.ytp-gradient-top").remove();
+        popup.document.querySelector("#movie_player > div.ytp-gradient-bottom").remove();
+        popup.document.querySelector(".ytp-chrome-top").remove();
+        popup.document.querySelector(".ytp-left-controls").remove();
+        popup.document.querySelector(".ytp-subtitles-button").remove();
+        popup.document.querySelector(".ytp-youtube-button").remove();
+        popup.document.querySelector(".ytp-fullscreen-button").remove();
+        popup.document.querySelector(".ytp-settings-button").style.marginLeft = "calc(100vw - 60px)";
+        function doSomething() {
+            if (popup.document.querySelector(".ytp-pause-overlay-container")) {
+                popup.document.querySelector(".ytp-pause-overlay-container").remove();
+                clearInterval(intervalId);
+                console.log("mil gaya");
+            } else {
+                console.log("nahi mila");
+            }
+        }
+        var intervalId = setInterval(doSomething, 1000);
+        popup.document.querySelector("#movie_player > div.ytp-chrome-bottom > div").style.bottom = "0px";
+    });
+})();`;
+    document.querySelector("#dragButton").href = encodedString;
+    document.querySelector("#dragButton").addEventListener("mouseenter",()=>{
+        document.querySelector("#dragButton").textContent = "YT-Popup";
+        console.log("eventocc");
+    });
+    document.querySelector("#dragButton").addEventListener("mouseleave",()=>{
+        document.querySelector("#dragButton").textContent = "DRAG ME";
+        console.log("eventocc");
+    });
+      </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+</body>
+</html>
